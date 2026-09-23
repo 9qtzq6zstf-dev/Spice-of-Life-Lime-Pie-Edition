@@ -104,7 +104,7 @@ public final class AttributeBenefit extends Benefit {
 
     private void createAttribute() {
         try {
-            attribute = BuiltInRegistries.ATTRIBUTE.getHolder(ResourceLocation.parse(name)).orElse(null);
+            attribute = BuiltInRegistries.ATTRIBUTE.getHolder(ResourceLocation.parse(name.equals("generic.speed") ? "generic.movement_speed" : name)).orElse(null);
         }
         catch (ResourceLocationException e) {
             markInvalid();

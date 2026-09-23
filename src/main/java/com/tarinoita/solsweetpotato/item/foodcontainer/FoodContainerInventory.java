@@ -26,6 +26,10 @@ public final class FoodContainerInventory extends ItemStackHandler {
         return !(stack.getItem() instanceof FoodContainerItem) && super.isItemValid(slot, stack);
     }
 
+    public void persist() {
+        onContentsChanged(0);
+    }
+
     @Override
     protected void onContentsChanged(int slot) {
         NonNullList<ItemStack> contents = NonNullList.withSize(getSlots(), ItemStack.EMPTY);

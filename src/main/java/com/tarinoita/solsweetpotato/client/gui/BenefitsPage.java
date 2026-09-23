@@ -82,7 +82,7 @@ public class BenefitsPage extends Page {
     private String getAttributeName(String name){
         Attribute attribute;
         try {
-            attribute = BuiltInRegistries.ATTRIBUTE.get(ResourceLocation.parse(name));
+            attribute = BuiltInRegistries.ATTRIBUTE.get(ResourceLocation.parse(name.equals("generic.speed") ? "generic.movement_speed" : name));
         }
         catch (ResourceLocationException e) {
             return "Invalid: " + name;

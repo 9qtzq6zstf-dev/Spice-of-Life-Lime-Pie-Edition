@@ -1,6 +1,6 @@
 # Spice of Life: Lime Pie Edition
 
-NeoForge 1.21.1 port of Spice of Life: Apple Pie Edition. It retains the `solapplepie` mod ID, item IDs, and resource namespace so existing worlds can retain their mod data.
+NeoForge 1.21.1 port of Spice of Life: Apple Pie Edition. It keeps the `solapplepie` mod ID, item IDs, and resource namespace.
 
 ## Development
 

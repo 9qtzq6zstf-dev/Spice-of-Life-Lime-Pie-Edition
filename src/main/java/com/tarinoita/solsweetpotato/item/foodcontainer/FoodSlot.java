@@ -12,6 +12,12 @@ public class FoodSlot extends SlotItemHandler {
     }
 
     @Override
+    public void setChanged() {
+        super.setChanged();
+        if (getItemHandler() instanceof FoodContainerInventory inventory) inventory.persist();
+    }
+
+    @Override
     public boolean mayPlace(@Nonnull ItemStack stack)
     {
         if (!canHold(stack)) {

@@ -113,7 +113,7 @@ public class FoodContainer extends AbstractContainerMenu {
         }
 
         clickedSlot.onTake(player, clickedStack);
-        return clickedStack;
+        return unchangedCopy;
      }
 
     private int addSlotRange(Inventory handler, int index, int x, int y, int amount, int dx) {

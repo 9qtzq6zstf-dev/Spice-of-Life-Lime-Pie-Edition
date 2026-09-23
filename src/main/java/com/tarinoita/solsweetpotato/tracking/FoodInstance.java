@@ -20,12 +20,12 @@ public final class FoodInstance {
 		ResourceLocation name = ResourceLocation.parse(encoded);
 
 		// TODO it'd be nice to store (and maybe even count) references to missing items, in case the mod is added back in later
-		Item item = BuiltInRegistries.ITEM.get(name);
-		if (item == null) {
+		if (!BuiltInRegistries.ITEM.containsKey(name)) {
 			SOLSweetPotato.LOGGER.warn("attempting to load item into food list that is no longer registered: " + encoded + " (removing from list)");
 			return null;
 		}
 
+		Item item = BuiltInRegistries.ITEM.get(name);
 		if (!new net.minecraft.world.item.ItemStack(item).has(net.minecraft.core.component.DataComponents.FOOD)) {
 			SOLSweetPotato.LOGGER.warn("attempting to load item into food list that is no longer edible: " + encoded + " (ignoring in case it becomes edible again later)");
 		}

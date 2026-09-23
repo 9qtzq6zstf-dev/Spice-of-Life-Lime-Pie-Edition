@@ -3,7 +3,9 @@ package com.tarinoita.solsweetpotato;
 import com.tarinoita.solsweetpotato.item.SOLSweetPotatoItems;
 import com.tarinoita.solsweetpotato.item.foodcontainer.FoodContainerInventory;
 import com.tarinoita.solsweetpotato.item.foodcontainer.FoodContainerItem;
+import com.tarinoita.solsweetpotato.item.foodcontainer.FoodSlot;
 import com.tarinoita.solsweetpotato.tracking.FoodList;
+import com.tarinoita.solsweetpotato.tracking.FoodInstance;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -36,6 +38,27 @@ public final class MigrationGameTests {
         restored.deserializeNBT(food.serializeNBT());
         helper.assertTrue(restored.hasEaten(Items.BREAD) && restored.getFoodsEaten() == 1,
             "Food attachment did not round trip");
+        helper.succeed();
+    }
+    @GameTest(templateNamespace = SOLSweetPotato.MOD_ID, template = "tests/empty")
+    public static void missingFoodAndRecipes(GameTestHelper helper) {
+        helper.assertTrue(FoodInstance.decode("missing:no_such_food") == null,
+            "A missing food ID resolved to the default item");
+        helper.assertTrue(helper.getLevel().getRecipeManager().byKey(SOLSweetPotato.resourceLocation("lunchbag")).isPresent(),
+            "Lunchbag recipe did not load");
+        helper.succeed();
+    }
+    @GameTest(templateNamespace = SOLSweetPotato.MOD_ID, template = "tests/empty")
+    public static void slotMutationPersists(GameTestHelper helper) {
+        ItemStack bag = new ItemStack(SOLSweetPotatoItems.LUNCHBAG.get());
+        FoodContainerInventory inventory = FoodContainerItem.getInventory(bag);
+        inventory.setStackInSlot(0, new ItemStack(Items.BREAD, 4));
+        FoodSlot slot = new FoodSlot(inventory, 0, 0, 0);
+        slot.getItem().shrink(2);
+        slot.setChanged();
+        FoodContainerInventory reopened = FoodContainerItem.getInventory(bag);
+        helper.assertTrue(reopened.getStackInSlot(0).getCount() == 2,
+            "Direct menu slot mutation was not persisted");
         helper.succeed();
     }
 }

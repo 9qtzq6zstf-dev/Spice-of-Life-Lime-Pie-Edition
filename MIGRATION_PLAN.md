@@ -8,9 +8,9 @@
 - [x] Update recipes, advancement paths, resource pack format, and language strings.
 - [ ] Verify optional Origins diet integration against an available NeoForge 1.21.1 build.
 - [x] Build and start dedicated server and client smoke tests.
-- [x] Run focused in-game checks for inventory persistence and player food attachment serialization.
+- [x] Run focused GameTests for inventory persistence, player food attachments, missing items, and recipe loading.
 - [x] Inspect the final staged change set and create the repository baseline commit.
 
-Compatibility choice: retain the existing `solapplepie` mod ID for save and resource compatibility while showing Lime Pie as the new display name.
+Keep the `solapplepie` mod ID and resource namespace while showing Lime Pie as the new display name.
 
 Origins verification remains open: the upstream `1.21.x/neo` branch targets Minecraft 1.21 and is dated July 2024; the archived Modrinth project has no published 1.21.1 version.
