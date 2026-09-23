@@ -1,0 +1,10 @@
+{
+  "pack": {
+    "description": "Spice of Life: Lime Pie Edition resources",
+    "pack_format": 34,
+    "supported_formats": [
+      34,
+      48
+    ]
+  }
+}

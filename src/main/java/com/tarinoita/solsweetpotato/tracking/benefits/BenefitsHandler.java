@@ -1,0 +1,153 @@
+package com.tarinoita.solsweetpotato.tracking.benefits;
+
+import com.tarinoita.solsweetpotato.ConfigHandler;
+import com.tarinoita.solsweetpotato.SOLSweetPotato;
+import com.tarinoita.solsweetpotato.SOLSweetPotatoConfig;
+import com.tarinoita.solsweetpotato.tracking.CapabilityHandler;
+import com.tarinoita.solsweetpotato.tracking.FoodList;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.event.entity.living.LivingEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
+
+import java.util.*;
+
+/**
+ * All updates to food diversity benefits go through this class.
+ */
+@EventBusSubscriber(modid = SOLSweetPotato.MOD_ID)
+public class BenefitsHandler {
+    @SubscribeEvent
+    public static void tickBenefits(PlayerTickEvent.Post event) {
+        if (!checkPlayer(event.getEntity())) {
+            return;
+        }
+
+        Player player = event.getEntity();
+
+        if (!player.isAlive()) {
+           return;
+        }
+
+        EffectBenefitsCapability effectBenefits = EffectBenefitsCapability.get(player);
+        effectBenefits.forEach(b -> b.onTick(player));
+    }
+
+    public static void updateBenefits(Player player, double diversity) {
+        if (player.getCommandSenderWorld().isClientSide) {
+            return;
+        }
+
+        FoodList foodList = FoodList.get(player);
+        if (foodList.getFoodsEaten() < SOLSweetPotatoConfig.minFoodsToActivate()) {
+            return;
+        }
+
+        List<List<Benefit>> benefitsList = ConfigHandler.getBenefitsList();
+        List<Double> thresholds = ConfigHandler.thresholds;
+
+        EffectBenefitsCapability effectBenefits = EffectBenefitsCapability.get(player);
+        effectBenefits.clear();
+
+        for (int i = 0; i < thresholds.size(); i++) {
+            double thresh = thresholds.get(i);
+            if (i >= benefitsList.size()) {
+                return;
+            }
+            benefitsList.get(i).forEach(b -> {
+                // != acts as XOR
+                if((diversity >= thresh) != b.isDetriment()) {
+                    b.applyTo(player);
+                } else {
+                    b.removeFrom(player);
+                }
+            });
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        updatePlayer(event);
+        CapabilityHandler.syncFoodList(event.getEntity());
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
+       Player player = event.getEntity();
+        removeAllBenefits(player);
+    }
+
+    public static void removeAllBenefits(Player player) {
+        List<List<Benefit>> benefitsList = ConfigHandler.getBenefitsList();
+        benefitsList.forEach(bt -> bt.forEach(b -> b.removeFrom(player)));
+    }
+
+    public static void updatePlayer(LivingEvent event) {
+        if (!checkEvent(event)) {
+            return;
+        }
+
+        Player player = (Player) event.getEntity();
+
+        updatePlayer(player);
+    }
+
+    public static void updatePlayer(Player player) {
+        if (player.level().isClientSide) {
+            return;
+        }
+
+        FoodList foodList = FoodList.get(player);
+        double diversity = foodList.foodDiversity();
+
+        updateBenefits(player, diversity);
+    }
+
+    public static boolean checkEvent(LivingEvent event) {
+        return event.getEntity() instanceof Player player && checkPlayer(player);
+    }
+
+    private static boolean checkPlayer(Player player) {
+        if (!(player instanceof ServerPlayer serverPlayer)) return false;
+        return !SOLSweetPotatoConfig.limitProgressionToSurvival() || serverPlayer.gameMode.isSurvival();
+    }
+
+    public static Pair<List<BenefitInfo>, List<BenefitInfo>> getBenefitInfo(double active_threshold, int foodEaten) {
+        // Can be called on client
+        List<BenefitInfo> activeBenefitInfo = new ArrayList<>();
+        List<BenefitInfo> inactiveBenefitInfo = new ArrayList<>();
+
+        if (foodEaten < SOLSweetPotatoConfig.minFoodsToActivate()) {
+            active_threshold = -1;
+        }
+
+        List<List<Benefit>> benefitsList = ConfigHandler.getBenefitsList();
+        List<Double> thresholds = ConfigHandler.thresholds;
+
+        for (int i = 0; i < thresholds.size(); i++) {
+            double thresh = thresholds.get(i);
+            if (i >= benefitsList.size()) {
+                break;
+            }
+            if (active_threshold >= thresh) {
+                benefitsList.get(i).forEach(b -> activeBenefitInfo.add(
+                        new BenefitInfo(b.getType(), b.getName(), b.getValue(), thresh, b.isDetriment())));
+            }
+            else {
+                benefitsList.get(i).forEach(b -> inactiveBenefitInfo.add(
+                        new BenefitInfo(b.getType(), b.getName(), b.getValue(), thresh, b.isDetriment())));
+            }
+        }
+
+        activeBenefitInfo.sort((bi1, bi2) -> Boolean.compare(bi1.detriment, bi2.detriment));
+        inactiveBenefitInfo.sort((bi1, bi2) -> Boolean.compare(bi1.detriment, bi2.detriment));
+
+        return new ImmutablePair<>(activeBenefitInfo, inactiveBenefitInfo);
+    }
+}
