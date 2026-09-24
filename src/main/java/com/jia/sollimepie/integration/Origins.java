@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.lang.reflect.Modifier;
 import java.util.WeakHashMap;
 
-/** Optional integration with the Origins Forge API. */
+/** Optional Origins diet integration through reflection. */
 public final class Origins {
     private static final Map<Player, Boolean> CACHE = new WeakHashMap<>();
 
