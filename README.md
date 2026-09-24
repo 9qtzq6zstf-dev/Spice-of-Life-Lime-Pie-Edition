@@ -2,7 +2,7 @@
 
 A Minecraft 1.21.1 NeoForge port of Spice of Life: Apple Pie Edition. This edition is maintained by JIA. The original Apple Pie Edition was created by Vice.
 
-The internal mod ID remains `solapplepie`. This is the project's ID and command namespace, even though the displayed name is Lime Pie Edition.
+The mod ID and resource namespace are `sollimepie`.
 
 ## Requirements and installation
 
@@ -20,11 +20,11 @@ The mod tracks your recent foods and calculates a diversity score. Eating a wide
 - **Lunchbag, Lunchbox, and Golden Lunchbox:** Store food and choose the stored food that best improves your diversity when you eat from them. Sneak and use one to open its inventory.
 - **Configuration:** Food history length, diversity rules, and benefits can be changed in the generated NeoForge config files. Server config is stored per world under `serverconfig`.
 
-Commands use the retained `/solapplepie` namespace:
+Commands use the `/sollimepie` namespace:
 
-- `/solapplepie diversity` shows the current diversity score.
-- `/solapplepie clear` clears food history and resets its benefits.
-- `/solapplepie sync` resends food history to the client.
+- `/sollimepie diversity` shows the current diversity score.
+- `/sollimepie clear` clears food history and resets its benefits.
+- `/sollimepie sync` resends food history to the client.
 
 The optional Origins diet integration has not been verified with a compatible NeoForge 1.21.1 Origins build.
 

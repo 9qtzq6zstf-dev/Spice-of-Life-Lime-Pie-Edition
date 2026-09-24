@@ -11,6 +11,6 @@
 - [x] Run focused GameTests for inventory persistence, player food attachments, missing items, and recipe loading.
 - [x] Inspect the final staged change set and create the repository baseline commit.
 
-Keep the `solapplepie` mod ID and resource namespace while showing Lime Pie as the new display name.
+Use the `sollimepie` mod ID and resource namespace for Lime Pie Edition.
 
 Origins verification remains open: the upstream `1.21.x/neo` branch targets Minecraft 1.21 and is dated July 2024; the archived Modrinth project has no published 1.21.1 version.
