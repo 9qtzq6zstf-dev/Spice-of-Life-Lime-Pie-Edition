@@ -35,7 +35,7 @@ Import this directory as a Gradle project in IntelliJ IDEA with Java 21. Build w
 ## Credits and license
 
 - **1.21.1 NeoForge port:** JIA.
-- **Spice of Life: Apple Pie Edition:** Vice.
+- **Spice of Life: Apple Pie Edition:** Vice. [Original repository](https://github.com/txnimc/Spice-of-Life-Apple-Pie).
 - **Spice of Life: Potato Edition:** [Kevun1](https://github.com/Kevun1/Spice-of-Life-Potato-Edition).
 - **Spice of Life: Carrot Edition:** [Cazsius and contributors](https://github.com/Cazsius/Spice-of-Life-Carrot-Edition).
 
