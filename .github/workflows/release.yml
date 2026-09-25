@@ -1,0 +1,136 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Mod version, for example 3.0.0'
+        required: true
+        type: string
+      version_type:
+        description: 'Release channel'
+        required: true
+        default: beta
+        type: choice
+        options:
+          - release
+          - beta
+          - alpha
+      release_notes:
+        description: 'Optional release notes; defaults to CHANGELOG.md'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Set release variables
+        id: vars
+        shell: bash
+        env:
+          MANUAL_VERSION: ${{ inputs.version }}
+          MANUAL_TYPE: ${{ inputs.version_type }}
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = workflow_dispatch ]; then
+            VERSION="${MANUAL_VERSION#v}"
+            CHANNEL="$MANUAL_TYPE"
+          else
+            VERSION="${GITHUB_REF_NAME#v}"
+            CHANNEL=release
+          fi
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+([+.-][0-9A-Za-z.-]+)?$ ]]; then
+            echo "Invalid release version: $VERSION" >&2
+            exit 1
+          fi
+          {
+            echo "version=$VERSION"
+            echo "channel=$CHANNEL"
+            echo "tag=v$VERSION"
+            echo "name=Spice of Life: Lime Pie Edition $VERSION for Minecraft 1.21.1"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Build and run GameTests
+        shell: bash
+        env:
+          RELEASE_VERSION: ${{ steps.vars.outputs.version }}
+        run: |
+          chmod +x ./gradlew
+          ./gradlew clean build runGameTestServer -Pmod_version="$RELEASE_VERSION" --no-configuration-cache --console=plain --no-daemon
+
+      - name: Collect release JAR
+        id: asset
+        shell: bash
+        run: |
+          mapfile -t jars < <(find build/libs -maxdepth 1 -type f -name '*.jar' ! -name '*-sources.jar' ! -name '*-javadoc.jar' | sort)
+          if [ "${#jars[@]}" -ne 1 ]; then
+            printf 'Expected exactly one release JAR, found %s\n' "${#jars[@]}" >&2
+            exit 1
+          fi
+          echo "jar=${jars[0]}" >> "$GITHUB_OUTPUT"
+
+      - name: Write release notes
+        shell: bash
+        env:
+          MANUAL_NOTES: ${{ inputs.release_notes }}
+        run: |
+          if [ -n "$MANUAL_NOTES" ]; then
+            printf '%s\n' "$MANUAL_NOTES" > RELEASE_NOTES.md
+          else
+            cp CHANGELOG.md RELEASE_NOTES.md
+          fi
+
+      - name: Publish GitHub release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ steps.vars.outputs.tag }}
+          RELEASE_NAME: ${{ steps.vars.outputs.name }}
+          RELEASE_CHANNEL: ${{ steps.vars.outputs.channel }}
+          RELEASE_JAR: ${{ steps.asset.outputs.jar }}
+        run: |
+          prerelease=(--prerelease=false)
+          if [ "$RELEASE_CHANNEL" != release ]; then
+            prerelease=(--prerelease)
+          fi
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release upload "$RELEASE_TAG" "$RELEASE_JAR" --clobber
+            gh release edit "$RELEASE_TAG" --title "$RELEASE_NAME" --notes-file RELEASE_NOTES.md "${prerelease[@]}"
+          else
+            gh release create "$RELEASE_TAG" "$RELEASE_JAR" --title "$RELEASE_NAME" --notes-file RELEASE_NOTES.md --target "$GITHUB_SHA" "${prerelease[@]}"
+          fi
+
+      - name: Publish CurseForge release
+        if: ${{ vars.CURSEFORGE_PROJECT_ID != '' }}
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          files: ${{ steps.asset.outputs.jar }}
+          name: ${{ steps.vars.outputs.name }}
+          version: ${{ steps.vars.outputs.version }}
+          version-type: ${{ steps.vars.outputs.channel }}
+          changelog-file: RELEASE_NOTES.md
+          loaders: neoforge
+          game-versions: '1.21.1'
+          java: '21'
+          curseforge-id: ${{ vars.CURSEFORGE_PROJECT_ID }}
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}

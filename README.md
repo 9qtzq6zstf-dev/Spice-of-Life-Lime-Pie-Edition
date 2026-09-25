@@ -32,6 +32,12 @@ The optional Origins diet integration has not been verified with a compatible Ne
 
 Import this directory as a Gradle project in IntelliJ IDEA with Java 21. Build with `./gradlew build` and run focused in-game tests with `./gradlew runGameTestServer`. The release JAR is written to `build/libs/`.
 
+## Releasing
+
+After pushing this repository to GitHub, push a `v*` version tag or start the **Release** workflow manually with a version. The workflow builds with Java 21, runs the GameTests, and uploads the sole release JAR to GitHub Releases. A tag push creates a stable release; a manual run defaults to beta. Manual release notes override `CHANGELOG.md`.
+
+CurseForge publishing is optional. Set the repository variable `CURSEFORGE_PROJECT_ID` and secret `CURSEFORGE_TOKEN` to enable it. Do not use another mod's project ID or upload token.
+
 ## Credits and license
 
 - **1.21.1 NeoForge port:** JIA.
