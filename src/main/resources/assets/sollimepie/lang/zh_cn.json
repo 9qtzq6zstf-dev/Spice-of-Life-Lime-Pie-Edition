@@ -1,0 +1,50 @@
+{
+	"tooltip.sollimepie.disabled": "该食物不计入饮食多样性。",
+
+	"command.sollimepie.sollimepie.no_permissions": "你没有权限对其他玩家执行此命令！",
+	"command.sollimepie.sollimepie.clear.success": "进食记录已重置！",
+	"command.sollimepie.sollimepie.diversity_feedback": "饮食多样性：%.2f",
+	"command.sollimepie.sollimepie.sync.success": "进食记录已同步！",
+	"command.sollimepie.sollimepie.origin.invalidated": "起源数据缓存已失效！",
+	"command.sollimepie.sollimepie.origin.inapplicable": "未安装起源模组，无需清理起源数据缓存。",
+	"command.sollimepie.sollimepie.origin.cleared": "起源数据缓存已清空！",
+
+	"item.sollimepie.food_book": "食物手册",
+	"item.sollimepie.lunchbox": "午餐盒",
+	"item.sollimepie.container.lunchbox": "午餐盒",
+	"item.sollimepie.golden_lunchbox": "金午餐盒",
+	"item.sollimepie.container.golden_lunchbox": "金午餐盒",
+	"item.sollimepie.lunchbag": "午餐袋",
+	"item.sollimepie.container.lunchbag": "午餐袋",
+
+	"key.sollimepie.open_food_book": "打开食物手册",
+	"key.sollimepie.category": "生活调味料：青柠派版",
+
+	"gui.sollimepie.food_book.stats": "概览",
+	"gui.sollimepie.food_book.stats.current_diversity": "当前饮食多样性",
+	"gui.sollimepie.food_book.stats.min_warning1": "还需进食 %d 次",
+	"gui.sollimepie.food_book.stats.min_warning2": "才能激活增益",
+	"gui.sollimepie.food_book.active_benefits_header": "生效的增益",
+	"gui.sollimepie.food_book.inactive_benefits_header": "未生效的增益",
+	"gui.sollimepie.food_book.active_detriments_header": "生效的负面效果",
+	"gui.sollimepie.food_book.inactive_detriments_header": "未生效的负面效果",
+	"gui.sollimepie.food_book.benefits.threshold_label": "阈值",
+	"gui.sollimepie.food_book.benefits.invalid": "无效：%s",
+	"gui.sollimepie.food_book.benefits.active_tooltip": "饮食多样性高于此阈值，该效果已生效。",
+	"gui.sollimepie.food_book.benefits.inactive_tooltip": "饮食多样性高于此阈值时，该效果将生效。",
+	"gui.sollimepie.food_book.food_queue_label": "已食用的食物",
+	"gui.sollimepie.food_book.queue.food_queue_tooltip": "过去吃过且计入饮食多样性的食物列表。",
+
+	"gui.sollimepie.food_book.fraction": "%1$s/%2$s",
+	"gui.sollimepie.food_book.flip_page": "翻页",
+
+	"gui.sollimepie.food_book.queue.tooltip.uneaten_contribution_label": "饮食多样性",
+	"gui.sollimepie.food_book.queue.tooltip.contribution_label": "多样性贡献",
+	"gui.sollimepie.food_book.queue.tooltip.last_eaten_label": "上次食用：%d 餐前",
+	"gui.sollimepie.food_book.queue.tooltip.last_eaten_label_singular": "上次食用：%d 餐前",
+
+	"config.sollimepie.is_food_tooltip_enabled": "启用食物提示",
+	"config.sollimepie.food_blacklist": "黑名单",
+	"config.sollimepie.food_whitelist": "白名单（启用后禁用黑名单）",
+	"config.sollimepie.reset_on_death": "死亡时重置"
+}

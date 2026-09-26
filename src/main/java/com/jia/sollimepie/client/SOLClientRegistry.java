@@ -18,8 +18,8 @@ public class SOLClientRegistry {
 
     @SubscribeEvent
     public static void registerKeybinds(RegisterKeyMappingsEvent event) {
-        OPEN_FOOD_BOOK = new KeyMapping(Localization.localized("key", "open_food_book"),
-                InputConstants.UNKNOWN.getValue(), Localization.localized("key", "category"));
+        OPEN_FOOD_BOOK = new KeyMapping(Localization.keyString("key", "open_food_book"),
+                InputConstants.UNKNOWN.getValue(), Localization.keyString("key", "category"));
         event.register(OPEN_FOOD_BOOK);
     }
     @SubscribeEvent

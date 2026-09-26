@@ -12,6 +12,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
+import static com.jia.sollimepie.lib.Localization.localizedComponent;
+
 
 @OnlyIn(Dist.CLIENT)
 final class PageFlipButton extends Button {
@@ -23,7 +25,7 @@ final class PageFlipButton extends Button {
 	private final Pageable pageable;
 
 	PageFlipButton(int x, int y, Direction direction, Pageable pageable) {
-		super(x, y, 23, 13, Component.literal(""), (button) -> ((PageFlipButton) button).changePage(), p_253695_ -> Component.literal("Flip Page"));
+		super(x, y, 23, 13, Component.literal(""), (button) -> ((PageFlipButton) button).changePage(), button -> localizedComponent("gui", "food_book.flip_page"));
 
 		this.direction = direction;
 		this.pageable = pageable;

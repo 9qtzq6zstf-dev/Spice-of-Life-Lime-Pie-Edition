@@ -84,11 +84,11 @@ public class BenefitsPage extends Page {
             attribute = BuiltInRegistries.ATTRIBUTE.get(ResourceLocation.parse("generic.speed".equals(name) ? "generic.movement_speed" : name));
         }
         catch (ResourceLocationException e) {
-            return "Invalid: " + name;
+            return localized("gui", "food_book.benefits.invalid", name);
         }
 
         if (attribute == null) {
-            return "Invalid: " + name;
+            return localized("gui", "food_book.benefits.invalid", name);
         }
 
         return I18n.get(attribute.getDescriptionId());
@@ -100,11 +100,11 @@ public class BenefitsPage extends Page {
             effect = BuiltInRegistries.MOB_EFFECT.get(ResourceLocation.parse(name));
         }
         catch (ResourceLocationException e) {
-            return "Invalid: " + name;
+            return localized("gui", "food_book.benefits.invalid", name);
         }
 
         if (effect == null) {
-            return "Invalid: " + name;
+            return localized("gui", "food_book.benefits.invalid", name);
         }
 
         return I18n.get(effect.getDisplayName().getString());
