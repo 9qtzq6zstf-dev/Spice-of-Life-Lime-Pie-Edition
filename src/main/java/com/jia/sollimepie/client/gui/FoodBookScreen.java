@@ -142,11 +142,13 @@ public final class FoodBookScreen extends Screen implements PageFlipButton.Pagea
 	}
 
 	@Override
-	public void render(GuiGraphics matrices, int mouseX, int mouseY, float partialTicks) {
-		renderBackground(matrices, mouseX, mouseY, partialTicks);
-
+	public void renderBackground(GuiGraphics matrices, int mouseX, int mouseY, float partialTicks) {
+		super.renderBackground(matrices, mouseX, mouseY, partialTicks);
 		UIElement.render(matrices, background, mouseX, mouseY);
+	}
 
+	@Override
+	public void render(GuiGraphics matrices, int mouseX, int mouseY, float partialTicks) {
 		super.render(matrices, mouseX, mouseY, partialTicks);
 
 		if (!pages.isEmpty()) { // might not be loaded yet; race condition
