@@ -33,7 +33,9 @@ public final class FoodContainerInventory extends ItemStackHandler {
     @Override
     protected void onContentsChanged(int slot) {
         NonNullList<ItemStack> contents = NonNullList.withSize(getSlots(), ItemStack.EMPTY);
-        for (int i = 0; i < getSlots(); i++) contents.set(i, getStackInSlot(i).copy());
+        for (int i = 0; i < getSlots(); i++) {
+            contents.set(i, getStackInSlot(i).copy());
+        }
         container.set(DataComponents.CONTAINER, ItemContainerContents.fromItems(contents));
     }
 }

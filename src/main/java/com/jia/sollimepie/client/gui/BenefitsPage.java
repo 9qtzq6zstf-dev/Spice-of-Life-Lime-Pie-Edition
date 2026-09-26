@@ -4,7 +4,6 @@ import com.jia.sollimepie.client.gui.elements.UILabel;
 import com.jia.sollimepie.tracking.benefits.BenefitInfo;
 import com.jia.sollimepie.utils.RomanNumber;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.ResourceLocationException;
 import net.minecraft.world.effect.MobEffect;
@@ -44,12 +43,12 @@ public class BenefitsPage extends Page {
         String name = info.name;
         double value = info.value;
 
-        if (info.type.equals("effect")) {
+        if ("effect".equals(info.type)) {
             name = getEffectName(name);
             int amplifier = (int) value;
             name = name + " " + RomanNumber.toRoman(amplifier + 1);
         }
-        else if (info.type.equals("attribute")) {
+        else if ("attribute".equals(info.type)) {
             name = getAttributeName(name);
             String op = "+";
             if (value < 0) {
@@ -82,7 +81,7 @@ public class BenefitsPage extends Page {
     private String getAttributeName(String name){
         Attribute attribute;
         try {
-            attribute = BuiltInRegistries.ATTRIBUTE.get(ResourceLocation.parse(name.equals("generic.speed") ? "generic.movement_speed" : name));
+            attribute = BuiltInRegistries.ATTRIBUTE.get(ResourceLocation.parse("generic.speed".equals(name) ? "generic.movement_speed" : name));
         }
         catch (ResourceLocationException e) {
             return "Invalid: " + name;

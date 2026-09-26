@@ -38,7 +38,7 @@ public class UILabel extends UIElement {
 		matrices.drawString(fontRenderer, text, x, y, color.getRGB(), false);
 	}
 
-	enum TextAlignment {
+	public enum TextAlignment {
 		LEFT(0), CENTER(1), RIGHT(2);
 
 		final int ordinal;

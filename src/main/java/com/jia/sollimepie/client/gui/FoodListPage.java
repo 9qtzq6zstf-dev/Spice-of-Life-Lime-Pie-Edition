@@ -13,14 +13,10 @@ import java.util.Map;
 import static com.jia.sollimepie.lib.Localization.localized;
 
 public final class FoodListPage extends ItemListPage {
-    Map<FoodInstance, Integer> foodMap;
-
     private FoodListPage(Rectangle frame, String header, List<ItemStack> items, Map<FoodInstance, Integer> foodMap) {
         super(frame, header, items);
 
         setHeaderTooltip(localized("gui", "food_book.queue.food_queue_tooltip"));
-
-        this.foodMap = foodMap;
 
         int minX = (1 - itemsPerRow) * itemSpacing / 2;
         int minY = (1 - rowsPerPage) * itemSpacing / 2 - 4;

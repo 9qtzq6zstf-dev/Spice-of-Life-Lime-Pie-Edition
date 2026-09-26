@@ -3,7 +3,6 @@ package com.jia.sollimepie.tracking;
 import com.jia.sollimepie.ConfigHandler;
 import com.jia.sollimepie.SOLLimePieConfig;
 import com.jia.sollimepie.api.FoodCapability;
-import com.jia.sollimepie.api.SOLLimePieAPI;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import net.minecraft.core.HolderLookup;
@@ -74,8 +73,9 @@ public final class FoodList implements FoodCapability, INBTSerializable<Compound
 		FoodInstance uniqueFood = FoodInstance.decode(encoded.getKey());
 		Integer lastEaten = Math.round(encoded.getValue());
 
-		if (uniqueFood == null)
+		if (uniqueFood == null) {
 			return null;
+		}
 
 		return new ImmutablePair<>(uniqueFood, lastEaten);
 	}
@@ -201,7 +201,7 @@ public final class FoodList implements FoodCapability, INBTSerializable<Compound
 		double minContribution = SOLLimePieConfig.minContribution();
 
 		if (startDecay > endDecay || startDecay < 0 || endDecay > size ||
-				startDecay > size || minContribution > 1 || minContribution < 0) {
+				minContribution > 1 || minContribution < 0) {
 			// invalid
 			return 0.0;
 		}
@@ -253,7 +253,9 @@ public final class FoodList implements FoodCapability, INBTSerializable<Compound
 
 	@Override
 	public boolean hasEaten(Item food) {
-		if (!new net.minecraft.world.item.ItemStack(food).has(net.minecraft.core.component.DataComponents.FOOD)) return false;
+		if (!new net.minecraft.world.item.ItemStack(food).has(net.minecraft.core.component.DataComponents.FOOD)) {
+		    return false;
+		}
 		return uniqueFoods.containsKey(new FoodInstance(food));
 	}
 

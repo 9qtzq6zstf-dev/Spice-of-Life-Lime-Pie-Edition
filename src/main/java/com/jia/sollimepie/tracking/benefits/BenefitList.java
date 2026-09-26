@@ -47,10 +47,10 @@ public class BenefitList {
             for (int j = 0; j < nbenefits; j++) {
                 CompoundTag benefitTag = thresholdTag.getCompound("benefit_" + j);
                 String benefitType = benefitTag.getString("type");
-                if (benefitType.equals("attribute")) {
+                if ("attribute".equals(benefitType)) {
                     thresholdBenefits.add(AttributeBenefit.fromNBT(benefitTag));
                 }
-                else if (benefitType.equals("effect")) {
+                else if ("effect".equals(benefitType)) {
                     thresholdBenefits.add(EffectBenefit.fromNBT(benefitTag));
                 }
                 else {

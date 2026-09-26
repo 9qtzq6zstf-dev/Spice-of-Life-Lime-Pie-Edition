@@ -1,11 +1,8 @@
 package com.jia.sollimepie.client.gui.elements;
 
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.font.FontManager;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
@@ -75,7 +72,9 @@ public abstract class UIElement {
 	 @param mouseY the mouse's y position
 	 */
 	protected void renderTooltip(GuiGraphics matrices, int mouseX, int mouseY) {
-		if (tooltip == null) return;
+		if (tooltip == null) {
+		    return;
+		}
 
 		renderTooltip(matrices, ItemStack.EMPTY, Collections.singletonList(Component.literal(tooltip)), mouseX, mouseY);
 	}

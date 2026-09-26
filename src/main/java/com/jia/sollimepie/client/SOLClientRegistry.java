@@ -8,12 +8,11 @@ import net.minecraft.client.KeyMapping;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.common.EventBusSubscriber;
 import com.mojang.blaze3d.platform.InputConstants;
 
 
-@EventBusSubscriber(modid = SOLLimePie.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = SOLLimePie.MOD_ID, value = Dist.CLIENT)
 public class SOLClientRegistry {
     public static KeyMapping OPEN_FOOD_BOOK;
 

@@ -8,7 +8,6 @@ import com.jia.sollimepie.tracking.benefits.BenefitsHandler;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -17,7 +16,6 @@ import net.minecraft.network.chat.*;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.util.Objects;
@@ -43,7 +41,7 @@ public final class FoodListCommand {
 
 	@FunctionalInterface
 	private interface CommandWithPlayer {
-		int run(CommandContext<CommandSourceStack> context, Player target) throws CommandSyntaxException;
+		int run(CommandContext<CommandSourceStack> context, Player target);
 	}
 
 	@FunctionalInterface
@@ -62,14 +60,15 @@ public final class FoodListCommand {
 
 	static ArgumentBuilder<CommandSourceStack, ?> withNoArgument(ArgumentBuilder<CommandSourceStack, ?> base, CommandWithoutArgs command) {
 		return base
-				.executes((context) -> command.run(context));
+				.executes(command::run);
 	}
 
 	static int displayDiversity(CommandContext<CommandSourceStack> context, Player target) {
 		boolean isOp = context.getSource().hasPermission(2);
 		boolean isTargetingSelf = isTargetingSelf(context, target);
-		if (!isOp && !isTargetingSelf)
+		if (!isOp && !isTargetingSelf) {
 			throw new IllegalStateException(localizedComponent("no_permissions").getString());
+		}
 
 		double diversity = FoodList.get(target).foodDiversity();
 		MutableComponent feedback = localizedComponent("diversity_feedback", diversity);
@@ -81,15 +80,15 @@ public final class FoodListCommand {
 		CapabilityHandler.syncFoodList(target);
 
 		sendFeedback(context.getSource(), localizedComponent("sync.success"));
-		System.out.println(target.getMaxHealth());
 		return Command.SINGLE_SUCCESS;
 	}
 
 	static int clearFoodList(CommandContext<CommandSourceStack> context, Player target) {
 		boolean isOp = context.getSource().hasPermission(2);
 		boolean isTargetingSelf = isTargetingSelf(context, target);
-		if (!isOp && !isTargetingSelf)
+		if (!isOp && !isTargetingSelf) {
 			throw new IllegalStateException(localizedComponent("no_permissions").getString());
+		}
 
 		FoodList.get(target).clearFood();
 		FoodList.get(target).resetFoodsEaten();
@@ -109,8 +108,9 @@ public final class FoodListCommand {
 	static int resetPlayerOrigin(CommandContext<CommandSourceStack> context, Player target) {
 		boolean isOp = context.getSource().hasPermission(2);
 		boolean isTargetingSelf = isTargetingSelf(context, target);
-		if (!isOp && !isTargetingSelf)
+		if (!isOp && !isTargetingSelf) {
 			throw new IllegalStateException(localizedComponent("no_permissions").getString());
+		}
 
 		Origins.cacheInvalidate(target);
 
@@ -130,8 +130,9 @@ public final class FoodListCommand {
 
 	static int resetAllOrigins(CommandContext<CommandSourceStack> context) {
 		boolean isOp = context.getSource().hasPermission(2);
-		if (!isOp)
+		if (!isOp) {
 			throw new IllegalStateException(localizedComponent("no_permissions").getString());
+		}
 
 		Origins.clearCache();
 

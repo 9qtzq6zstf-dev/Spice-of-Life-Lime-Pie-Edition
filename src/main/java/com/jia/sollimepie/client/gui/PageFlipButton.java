@@ -7,13 +7,11 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
-import java.util.function.Supplier;
 
 @OnlyIn(Dist.CLIENT)
 final class PageFlipButton extends Button {
@@ -33,7 +31,9 @@ final class PageFlipButton extends Button {
 
 	@Override
 	public void renderWidget(GuiGraphics matrices, int mouseX, int mouseY, float partialTicks) {
-		if (!visible) return;
+		if (!visible) {
+		    return;
+		}
 
 		int textureX = 0;
 

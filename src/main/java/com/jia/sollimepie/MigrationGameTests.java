@@ -14,17 +14,18 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
+import java.util.Objects;
+
 @PrefixGameTestTemplate(false)
 public final class MigrationGameTests {
     @GameTest(templateNamespace = SOLLimePie.MOD_ID, template = "tests/empty")
     public static void lunchbagContentsPersist(GameTestHelper helper) {
         ItemStack bag = new ItemStack(SOLLimePieItems.LUNCHBAG.get());
-        FoodContainerInventory inventory = FoodContainerItem.getInventory(bag);
-        helper.assertTrue(inventory != null, "Lunchbag inventory missing");
+        FoodContainerInventory inventory = Objects.requireNonNull(FoodContainerItem.getInventory(bag), "Lunchbag inventory missing");
         inventory.setStackInSlot(2, new ItemStack(Items.BREAD, 3));
         helper.assertTrue(bag.has(DataComponents.CONTAINER), "Lunchbag contents were not written");
-        FoodContainerInventory reopened = FoodContainerItem.getInventory(bag);
-        helper.assertTrue(reopened != null && reopened.getSlots() == 5, "Lunchbag slot count changed");
+        FoodContainerInventory reopened = Objects.requireNonNull(FoodContainerItem.getInventory(bag), "Lunchbag inventory missing after reopening");
+        helper.assertTrue(reopened.getSlots() == 5, "Lunchbag slot count changed");
         helper.assertTrue(reopened.getStackInSlot(2).is(Items.BREAD) && reopened.getStackInSlot(2).getCount() == 3,
             "Lunchbag food was lost after reopening");
         helper.succeed();
@@ -51,12 +52,12 @@ public final class MigrationGameTests {
     @GameTest(templateNamespace = SOLLimePie.MOD_ID, template = "tests/empty")
     public static void slotMutationPersists(GameTestHelper helper) {
         ItemStack bag = new ItemStack(SOLLimePieItems.LUNCHBAG.get());
-        FoodContainerInventory inventory = FoodContainerItem.getInventory(bag);
+        FoodContainerInventory inventory = Objects.requireNonNull(FoodContainerItem.getInventory(bag), "Lunchbag inventory missing");
         inventory.setStackInSlot(0, new ItemStack(Items.BREAD, 4));
         FoodSlot slot = new FoodSlot(inventory, 0, 0, 0);
         slot.getItem().shrink(2);
         slot.setChanged();
-        FoodContainerInventory reopened = FoodContainerItem.getInventory(bag);
+        FoodContainerInventory reopened = Objects.requireNonNull(FoodContainerItem.getInventory(bag), "Lunchbag inventory missing after reopening");
         helper.assertTrue(reopened.getStackInSlot(0).getCount() == 2,
             "Direct menu slot mutation was not persisted");
         helper.succeed();

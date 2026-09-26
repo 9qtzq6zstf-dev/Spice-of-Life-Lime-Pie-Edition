@@ -4,7 +4,6 @@ import com.jia.sollimepie.client.TooltipHandler;
 import com.jia.sollimepie.tracking.FoodInstance;
 import com.jia.sollimepie.tracking.FoodList;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.*;
 import net.minecraft.world.item.ItemStack;
 
@@ -33,7 +32,7 @@ public class UIFoodQueueItem extends UIItemStack{
 
     private List<Component> getFoodQueueTooltip() {
         Component foodName =  Component.translatable(itemStack.getItem().getDescriptionId(itemStack))
-                .withStyle(itemStack.getRarity().color());
+                .withStyle(itemStack.getRarity().getStyleModifier());
 
         List<Component> tooltip = new ArrayList<>();
         tooltip.add(foodName);

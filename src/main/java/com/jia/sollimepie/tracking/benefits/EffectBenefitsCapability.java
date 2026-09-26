@@ -8,8 +8,6 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -66,7 +64,6 @@ public class EffectBenefitsCapability implements INBTSerializable<CompoundTag>, 
     @Override
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag tag) { deserializeNBT(tag); }
 
-    @Nonnull
     @Override
     public Iterator<EffectBenefit> iterator() {
         return effectBenefits.iterator();

@@ -36,7 +36,7 @@ public final class AttributeBenefit extends Benefit {
 
         modifier = new AttributeModifier(SOLLimePie.resourceLocation("benefit/" + id), value, AttributeModifier.Operation.ADD_VALUE);
 
-        isMaxHealth = name.equals("generic.max_health");
+        isMaxHealth = "generic.max_health".equals(name);
     }
 
     public AttributeBenefit(String name, double value, double threshold, String uuid, boolean detriment) {
@@ -46,12 +46,14 @@ public final class AttributeBenefit extends Benefit {
 
         modifier = new AttributeModifier(SOLLimePie.resourceLocation("benefit/" + id), value, AttributeModifier.Operation.ADD_VALUE);
 
-        isMaxHealth = name.equals("generic.max_health");
+        isMaxHealth = "generic.max_health".equals(name);
     }
 
+    @Override
     public void applyTo(Player player) {
-        if (!checkUsage() || player.level().isClientSide)
+        if (!checkUsage() || player.level().isClientSide) {
             return;
+        }
 
         float oldMax = player.getMaxHealth();
 
@@ -60,7 +62,7 @@ public final class AttributeBenefit extends Benefit {
             attr = Objects.requireNonNull(player.getAttribute(attribute));
         }
         catch (NullPointerException e) {
-            SOLLimePie.LOGGER.warn("ERROR: player does not have attribute: " + attribute.value().getDescriptionId());
+            SOLLimePie.LOGGER.warn("ERROR: player does not have attribute: {}", attribute.value().getDescriptionId());
             return;
         }
 
@@ -74,16 +76,18 @@ public final class AttributeBenefit extends Benefit {
         }
     }
 
+    @Override
     public void removeFrom(Player player) {
-        if (!checkUsage() || player.level().isClientSide)
+        if (!checkUsage() || player.level().isClientSide) {
             return;
+        }
 
         AttributeInstance attr;
         try {
             attr = Objects.requireNonNull(player.getAttribute(attribute));
         }
         catch (NullPointerException e) {
-            SOLLimePie.LOGGER.warn("ERROR: player does not have attribute: " + attribute.value().getDescriptionId());
+            SOLLimePie.LOGGER.warn("ERROR: player does not have attribute: {}", attribute.value().getDescriptionId());
             return;
         }
         attr.removeModifier(modifier);
@@ -104,7 +108,7 @@ public final class AttributeBenefit extends Benefit {
 
     private void createAttribute() {
         try {
-            attribute = BuiltInRegistries.ATTRIBUTE.getHolder(ResourceLocation.parse(name.equals("generic.speed") ? "generic.movement_speed" : name)).orElse(null);
+            attribute = BuiltInRegistries.ATTRIBUTE.getHolder(ResourceLocation.parse("generic.speed".equals(name) ? "generic.movement_speed" : name)).orElse(null);
         }
         catch (ResourceLocationException e) {
             markInvalid();
@@ -116,6 +120,7 @@ public final class AttributeBenefit extends Benefit {
         }
     }
 
+    @Override
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
 
@@ -138,7 +143,7 @@ public final class AttributeBenefit extends Benefit {
 
     public static AttributeBenefit fromNBT(CompoundTag tag) {
         String type = tag.getString("type");
-        if (!type.equals("attribute")) {
+        if (!"attribute".equals(type)) {
             throw new RuntimeException("Mismatching benefit type");
         }
         String n = tag.getString("name");

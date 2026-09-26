@@ -4,7 +4,6 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
 
-import javax.annotation.Nonnull;
 
 public class FoodSlot extends SlotItemHandler {
     public FoodSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
@@ -14,11 +13,13 @@ public class FoodSlot extends SlotItemHandler {
     @Override
     public void setChanged() {
         super.setChanged();
-        if (getItemHandler() instanceof FoodContainerInventory inventory) inventory.persist();
+        if (getItemHandler() instanceof FoodContainerInventory inventory) {
+            inventory.persist();
+        }
     }
 
     @Override
-    public boolean mayPlace(@Nonnull ItemStack stack)
+    public boolean mayPlace(ItemStack stack)
     {
         if (!canHold(stack)) {
             return false;
@@ -26,7 +27,7 @@ public class FoodSlot extends SlotItemHandler {
         return super.mayPlace(stack);
     }
 
-    public static boolean canHold(@Nonnull ItemStack stack) {
+    public static boolean canHold(ItemStack stack) {
        return stack.has(net.minecraft.core.component.DataComponents.FOOD);
     }
 }

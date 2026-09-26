@@ -24,7 +24,7 @@ public final class Origins {
         try {
             Class<?> type = Class.forName("io.github.edwinmindcraft.origins.api.capabilities.IOriginContainer");
             Method getter = Arrays.stream(type.getMethods())
-                .filter(method -> method.getName().equals("get") && Modifier.isStatic(method.getModifiers())
+                .filter(method -> "get".equals(method.getName()) && Modifier.isStatic(method.getModifiers())
                     && method.getParameterCount() == 1 && method.getParameterTypes()[0].isAssignableFrom(Player.class))
                 .findFirst().orElseThrow(NoSuchMethodException::new);
             Object value = getter.invoke(null, player);
@@ -32,12 +32,18 @@ public final class Origins {
             if (container != null && !type.isInstance(container)) {
                 container = container.getClass().getMethod("orElse", Object.class).invoke(container, (Object) null);
             }
-            if (container == null) return false;
+            if (container == null) {
+                return false;
+            }
             Object origins = type.getMethod("getOrigins").invoke(container);
-            if (!(origins instanceof Map<?, ?> map)) return false;
+            if (!(origins instanceof Map<?, ?> map)) {
+                return false;
+            }
             for (Object key : map.values()) {
                 String id = String.valueOf(key);
-                if (id.contains("origins:vegetarian") || id.contains("origins:carnivore")) return true;
+                if (id.contains("origins:vegetarian") || id.contains("origins:carnivore")) {
+                    return true;
+                }
             }
         } catch (ReflectiveOperationException | LinkageError error) {
             SOLLimePie.LOGGER.warn("Origins diet integration is unavailable", error);

@@ -10,7 +10,7 @@ import com.jia.sollimepie.lib.Localization;
 import javax.annotation.Nullable;
 
 public class FoodContainerProvider implements MenuProvider {
-    private String displayName;
+    private final String displayName;
 
     public FoodContainerProvider(String displayName) {
         this.displayName = displayName;

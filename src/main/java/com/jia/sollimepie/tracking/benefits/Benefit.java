@@ -9,7 +9,7 @@ public abstract class Benefit {
     protected final String name;
     protected final double value;
     protected boolean invalid = false;
-    protected boolean detriment = false;
+    protected boolean detriment;
     protected final double threshold;
 
     public Benefit(String benefitType, String name, double value, double threshold, boolean detriment) {
@@ -33,7 +33,7 @@ public abstract class Benefit {
     }
 
     protected void markInvalid() {
-        SOLLimePie.LOGGER.warn("Invalid attribute specified in config: " + name);
+        SOLLimePie.LOGGER.warn("Invalid attribute specified in config: {}", name);
         invalid = true;
     }
 
@@ -64,10 +64,9 @@ public abstract class Benefit {
 
     @Override
     public boolean equals(Object other) {
-        if (!(other instanceof Benefit)) {
+        if (!(other instanceof Benefit b)) {
             return false;
         }
-        Benefit b = (Benefit) other;
 
         return (benefitType.equals(b.benefitType) && name.equals(b.name) && value == b.value && b.threshold == threshold);
     }

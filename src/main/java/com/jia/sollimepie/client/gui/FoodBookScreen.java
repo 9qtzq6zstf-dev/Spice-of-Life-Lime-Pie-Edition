@@ -45,7 +45,7 @@ public final class FoodBookScreen extends Screen implements PageFlipButton.Pagea
 	private PageFlipButton nextPageButton;
 	private PageFlipButton prevPageButton;
 
-	private Player player;
+	private final Player player;
 	private Set<Map.Entry<FoodInstance, Integer>> foodData;
 
 	private final List<Page> pages = new ArrayList<>();
@@ -158,7 +158,9 @@ public final class FoodBookScreen extends Screen implements PageFlipButton.Pagea
 
 	@Override
 	public void switchToPage(int pageNumber) {
-		if (!isWithinRange(pageNumber)) return;
+		if (!isWithinRange(pageNumber)) {
+		    return;
+		}
 
 		currentPageNumber = pageNumber;
 		updateButtonVisibility();

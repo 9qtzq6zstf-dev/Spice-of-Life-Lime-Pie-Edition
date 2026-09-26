@@ -25,17 +25,20 @@ public final class EffectBenefit extends Benefit{
         super("effect", name, value, threshold, detriment);
     }
 
+    @Override
     public void applyTo(Player player) {
-        if (!checkUsage() || player.level().isClientSide)
+        if (!checkUsage() || player.level().isClientSide) {
             return;
+        }
 
         EffectBenefitsCapability effectBenefits = EffectBenefitsCapability.get(player);
         effectBenefits.addEffectBenefitUnique(this);
     }
 
     public void onTick(Player player) {
-        if (!checkUsage() || player.level().isClientSide)
+        if (!checkUsage() || player.level().isClientSide) {
             return;
+        }
 
         // Only refresh this effect when less than REAPPLY_DURATION ticks remaining
         MobEffectInstance currentEffect = player.getEffect(effect);
@@ -47,9 +50,11 @@ public final class EffectBenefit extends Benefit{
         player.addEffect(new MobEffectInstance(effect, DEFAULT_DURATION, (int) value, false, false));
     }
 
+    @Override
     public void removeFrom(Player player) {
-        if (!checkUsage() || player.level().isClientSide)
+        if (!checkUsage() || player.level().isClientSide) {
             return;
+        }
 
         EffectBenefitsCapability effectBenefits = EffectBenefitsCapability.get(player);
         effectBenefits.removeEffectBenefit(this);
@@ -108,7 +113,7 @@ public final class EffectBenefit extends Benefit{
 
     public static EffectBenefit fromNBT(CompoundTag tag) {
         String type = tag.getString("type");
-        if (!type.equals("effect")) {
+        if (!"effect".equals(type)) {
             throw new RuntimeException("Mismatching benefit type");
         }
         String n = tag.getString("name");

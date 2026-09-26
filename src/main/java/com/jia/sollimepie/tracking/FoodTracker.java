@@ -18,7 +18,6 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.minecraft.core.registries.BuiltInRegistries;
 
@@ -35,8 +34,12 @@ public final class FoodTracker {
 		Player player = (Player) event.getEntity();
 
 		Item usedItem = event.getItem().getItem();
-		if (!event.getItem().has(net.minecraft.core.component.DataComponents.FOOD) && usedItem != Items.CAKE) return;
-		if (usedItem instanceof FoodContainerItem) return;
+		if (!event.getItem().has(net.minecraft.core.component.DataComponents.FOOD) && usedItem != Items.CAKE) {
+		    return;
+		}
+		if (usedItem instanceof FoodContainerItem) {
+		    return;
+		}
 
 		updateFoodList(usedItem, player);
 	}
@@ -45,11 +48,13 @@ public final class FoodTracker {
 	public static void onCakeBlockEaten(PlayerInteractEvent.RightClickBlock event) {
 		// Canceled means some other mod already resolved this event,
 		// e.g. Farmer's Delight cut off a slice with a knife.
-		if (event.isCanceled()) return;
+		if (event.isCanceled()) {
+		    return;
+		}
 
 		BlockState state = event.getLevel().getBlockState(event.getPos());
 		Block clickedBlock = state.getBlock();
-		Player player = (Player)event.getEntity();
+		Player player = event.getEntity();
 
 		Item eatenItem = Items.CAKE;
 		// If Farmer's Delight is installed, replace "cake" with FD's "cake slice"

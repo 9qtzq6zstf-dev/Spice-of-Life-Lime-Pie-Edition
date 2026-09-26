@@ -21,7 +21,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @Mod(SOLLimePie.MOD_ID)
-@EventBusSubscriber(modid = SOLLimePie.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = SOLLimePie.MOD_ID)
 public final class SOLLimePie {
     public static final String MOD_ID = "sollimepie";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);

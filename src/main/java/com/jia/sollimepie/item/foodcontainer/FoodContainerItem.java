@@ -35,47 +35,65 @@ public class FoodContainerItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (player.isCrouching()) {
-            if (player instanceof ServerPlayer serverPlayer) serverPlayer.openMenu(new FoodContainerProvider(displayName));
+            if (player instanceof ServerPlayer serverPlayer) {
+                serverPlayer.openMenu(new FoodContainerProvider(displayName));
+            }
             return InteractionResultHolder.sidedSuccess(stack, world.isClientSide);
         }
         if (isInventoryEmpty(stack) || (ModList.get().isLoaded("origins") && Origins.hasRestrictedDiet(player))) {
             return InteractionResultHolder.pass(stack);
         }
-        if (!player.canEat(false)) return InteractionResultHolder.fail(stack);
+        if (!player.canEat(false)) {
+            return InteractionResultHolder.fail(stack);
+        }
         player.startUsingItem(hand);
         return InteractionResultHolder.consume(stack);
     }
 
     private static boolean isInventoryEmpty(ItemStack container) {
         ItemStackHandler handler = getInventory(container);
-        if (handler == null) return true;
+        if (handler == null) {
+            return true;
+        }
         for (int i = 0; i < handler.getSlots(); i++) {
             ItemStack stack = handler.getStackInSlot(i);
-            if (!stack.isEmpty() && stack.has(DataComponents.FOOD)) return false;
+            if (!stack.isEmpty() && stack.has(DataComponents.FOOD)) {
+                return false;
+            }
         }
         return true;
     }
 
     @Nullable
     public static FoodContainerInventory getInventory(ItemStack bag) {
-        if (bag.getItem() instanceof FoodContainerItem item) return new FoodContainerInventory(bag, item.nslots);
+        if (bag.getItem() instanceof FoodContainerItem item) {
+            return new FoodContainerInventory(bag, item.nslots);
+        }
         return null;
     }
 
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level world, LivingEntity entity) {
-        if (!(entity instanceof Player player)) return stack;
+        if (!(entity instanceof Player player)) {
+            return stack;
+        }
         FoodContainerInventory handler = getInventory(stack);
-        if (handler == null) return stack;
+        if (handler == null) {
+            return stack;
+        }
         int slot = getBestFoodSlot(handler, player);
-        if (slot < 0) return stack;
+        if (slot < 0) {
+            return stack;
+        }
 
         ItemStack food = handler.getStackInSlot(slot);
         ItemStack before = food.copy();
         ItemStack result = food.finishUsingItem(world, entity);
         if (!result.has(DataComponents.FOOD) && !result.isEmpty()) {
             handler.setStackInSlot(slot, ItemStack.EMPTY);
-            if (!player.getInventory().add(result)) player.drop(result, false);
+            if (!player.getInventory().add(result)) {
+                player.drop(result, false);
+            }
         } else {
             handler.setStackInSlot(slot, result);
         }
@@ -94,7 +112,9 @@ public class FoodContainerItem extends Item {
         int bestSlot = -1;
         for (int i = 0; i < handler.getSlots(); i++) {
             ItemStack food = handler.getStackInSlot(i);
-            if (food.isEmpty() || !food.has(DataComponents.FOOD)) continue;
+            if (food.isEmpty() || !food.has(DataComponents.FOOD)) {
+                continue;
+            }
             double change = foodList.simulateFoodAdd(food.getItem());
             if (change > maxDiversity) {
                 maxDiversity = change;

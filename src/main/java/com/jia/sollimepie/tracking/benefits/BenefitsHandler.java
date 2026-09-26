@@ -13,7 +13,6 @@ import net.neoforged.neoforge.event.entity.living.LivingEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.util.*;
@@ -114,7 +113,9 @@ public class BenefitsHandler {
     }
 
     private static boolean checkPlayer(Player player) {
-        if (!(player instanceof ServerPlayer serverPlayer)) return false;
+        if (!(player instanceof ServerPlayer serverPlayer)) {
+            return false;
+        }
         return !SOLLimePieConfig.limitProgressionToSurvival() || serverPlayer.gameMode.isSurvival();
     }
 

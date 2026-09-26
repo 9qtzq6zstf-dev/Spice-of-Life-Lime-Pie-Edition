@@ -32,7 +32,9 @@ public final class CapabilityHandler {
 
     @SubscribeEvent
     public static void onClone(PlayerEvent.Clone event) {
-        if (event.isWasDeath() && SOLLimePieConfig.shouldResetOnDeath()) return;
+        if (event.isWasDeath() && SOLLimePieConfig.shouldResetOnDeath()) {
+            return;
+        }
         FoodList original = FoodList.get(event.getOriginal());
         FoodList copy = FoodList.get(event.getEntity());
         copy.deserializeNBT(original.serializeNBT());

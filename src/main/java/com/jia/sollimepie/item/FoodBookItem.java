@@ -7,7 +7,6 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
-import net.neoforged.api.distmarker.Dist;
 
 public final class FoodBookItem extends Item {
 	public FoodBookItem() {
