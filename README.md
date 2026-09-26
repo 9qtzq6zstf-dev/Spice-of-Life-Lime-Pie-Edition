@@ -28,6 +28,12 @@ Commands use the `/sollimepie` namespace:
 
 The optional Origins diet integration has not been verified with a compatible NeoForge 1.21.1 Origins build.
 
+## Lime Pie updates
+
+- The Food Book, Lunchbag, Lunchbox, and Golden Lunchbox appear in a dedicated creative inventory tab with the Food Book as its icon.
+- English and Simplified Chinese translations cover item names, the Food Book, tooltips, keybinds, and command feedback. Player-facing Food Book text uses translation keys instead of fixed English strings.
+- Recent port fixes cover configuration parsing, lunch container edge cases, and Food Book background rendering. Migration GameTests check food tracking and container behavior.
+
 ## Development
 
 Import this directory as a Gradle project in IntelliJ IDEA with Java 21. Build with `./gradlew build` and run focused in-game tests with `./gradlew runGameTestServer`. The release JAR is written to `build/libs/`.

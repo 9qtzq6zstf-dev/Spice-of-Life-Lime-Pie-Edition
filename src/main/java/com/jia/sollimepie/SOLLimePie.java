@@ -4,6 +4,7 @@ import com.jia.sollimepie.client.ContainerScreenRegistry;
 import com.jia.sollimepie.communication.ConfigMessage;
 import com.jia.sollimepie.communication.FoodListMessage;
 import com.jia.sollimepie.item.SOLLimePieItems;
+import com.jia.sollimepie.item.SOLLimePieCreativeTabs;
 import com.jia.sollimepie.item.foodcontainer.FoodContainerItem;
 import com.jia.sollimepie.tracking.CapabilityHandler;
 import net.minecraft.resources.ResourceLocation;
@@ -36,6 +37,7 @@ public final class SOLLimePie {
     public SOLLimePie(IEventBus modBus, ModContainer container) {
         SOLLimePieConfig.setUp(container);
         SOLLimePieItems.ITEMS.register(modBus);
+        SOLLimePieCreativeTabs.TABS.register(modBus);
         ContainerScreenRegistry.MENU_TYPES.register(modBus);
         CapabilityHandler.ATTACHMENTS.register(modBus);
     }

@@ -20,6 +20,7 @@
 
 	"key.sollimepie.open_food_book": "Open Food Book",
 	"key.sollimepie.category": "Spice of Life: Lime Pie Edition",
+	"itemGroup.sollimepie": "Spice of Life: Lime Pie Edition",
 
 	"gui.sollimepie.food_book.stats": "Overview",
 	"gui.sollimepie.food_book.stats.current_diversity": "Current Food Diversity",
