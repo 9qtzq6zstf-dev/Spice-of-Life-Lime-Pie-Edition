@@ -70,6 +70,16 @@ jobs:
             echo "name=Spice of Life: Lime Pie Edition $VERSION for Minecraft 1.21.1"
           } >> "$GITHUB_OUTPUT"
 
+      - name: Check CurseForge token access
+        shell: bash
+        env:
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+        run: |
+          if [ -z "$CURSEFORGE_TOKEN" ]; then
+            echo '::error::CURSEFORGE_TOKEN is unavailable. Add it as an Actions secret in this repository before releasing.'
+            exit 1
+          fi
+
       - name: Build and run GameTests
         shell: bash
         env:
@@ -121,7 +131,6 @@ jobs:
           fi
 
       - name: Publish CurseForge release
-        if: ${{ vars.CURSEFORGE_PROJECT_ID != '' }}
         uses: Kir-Antipov/mc-publish@v3.3
         with:
           files: ${{ steps.asset.outputs.jar }}
@@ -132,5 +141,5 @@ jobs:
           loaders: neoforge
           game-versions: '1.21.1'
           java: '21'
-          curseforge-id: ${{ vars.CURSEFORGE_PROJECT_ID }}
+          curseforge-id: 1712324
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}

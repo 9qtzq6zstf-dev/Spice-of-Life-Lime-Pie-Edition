@@ -36,7 +36,7 @@ Import this directory as a Gradle project in IntelliJ IDEA with Java 21. Build w
 
 After pushing this repository to GitHub, push a `v*` version tag or start the **Release** workflow manually with a version. The workflow builds with Java 21, runs the GameTests, and uploads the sole release JAR to GitHub Releases. A tag push creates a stable release; a manual run defaults to beta. Manual release notes override `CHANGELOG.md`.
 
-CurseForge publishing is optional. Set the repository variable `CURSEFORGE_PROJECT_ID` and secret `CURSEFORGE_TOKEN` to enable it. Do not use another mod's project ID or upload token.
+The workflow also publishes to CurseForge project `1712324`. Add `CURSEFORGE_TOKEN` as an Actions secret in this repository before releasing. A secret in another repository does not transfer to a new personal repository. The workflow stops before building if the secret is unavailable.
 
 ## Credits and license
 
