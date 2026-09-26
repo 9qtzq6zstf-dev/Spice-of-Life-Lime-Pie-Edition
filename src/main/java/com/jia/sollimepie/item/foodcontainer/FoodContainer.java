@@ -18,7 +18,7 @@ public class FoodContainer extends AbstractContainerMenu {
     public ItemStack containerItem;
     public int nslots;
 
-    private Inventory playerInventory;
+    private final Inventory playerInventory;
 
     public FoodContainer(int id, Inventory playerInventory, Player player) {
         super(ContainerScreenRegistry.FOOD_CONTAINER.get(), id);
@@ -79,8 +79,11 @@ public class FoodContainer extends AbstractContainerMenu {
 
     @Override
     public ItemStack quickMoveStack(Player player, int slotId) {
+        if (slotId < 0 || slotId >= slots.size()) {
+            return ItemStack.EMPTY;
+        }
         Slot clickedSlot = slots.get(slotId);
-        if (clickedSlot == null || slotId < 0 || !clickedSlot.hasItem()) {
+        if (!clickedSlot.hasItem()) {
             return ItemStack.EMPTY;
         }
 
@@ -125,12 +128,11 @@ public class FoodContainer extends AbstractContainerMenu {
         return index;
     }
 
-    private int addSlotBox(Inventory handler, int index, int x, int y, int horAmount, int dx, int verAmount, int dy) {
+    private void addSlotBox(Inventory handler, int index, int x, int y, int horAmount, int dx, int verAmount, int dy) {
         for (int j = 0; j < verAmount; j++) {
             index = addSlotRange(handler, index, x, y, horAmount, dx);
             y += dy;
         }
-        return index;
     }
 
     protected void layoutPlayerInventorySlots(int leftCol, int topRow) {

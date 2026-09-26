@@ -11,7 +11,6 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.ModConfigSpec.*;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
@@ -23,7 +22,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 
-@EventBusSubscriber(modid = SOLLimePie.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = SOLLimePie.MOD_ID)
 public final class SOLLimePieConfig
 {
 	private static String localizationPath(String path) {
@@ -56,7 +55,9 @@ public final class SOLLimePieConfig
 	@SubscribeEvent
 	public static void onConfigReload(ModConfigEvent.Reloading event) {
 		MinecraftServer currentServer = ServerLifecycleHooks.getCurrentServer();
-		if (currentServer == null) return;
+		if (currentServer == null) {
+		    return;
+		}
 
 		PlayerList players = currentServer.getPlayerList();
 		for (Player player : players.getPlayers()) {
@@ -144,7 +145,7 @@ public final class SOLLimePieConfig
 					.comment(" A list of diversity value thresholds, in ascending order. When the player's food diversity reaches a threshold,\n"
 							+" they will get the benefits associated with that threshold.\n"
 							+"\n")
-					.defineList("thresholds", Lists.newArrayList(2.0, 5.0, 7.0, 10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 45.0, 50.0, 60.0, 70.0, 80.0, 90.0, 100.0), e -> e instanceof Double);
+					.defineList("thresholds", Lists.newArrayList(2.0, 5.0, 7.0, 10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 45.0, 50.0, 60.0, 70.0, 80.0, 90.0, 100.0), () -> 0.0, e -> e instanceof Double);
 
 			benefitsUnparsed = builder
 					.translation(localizationPath("benefits_unparsed"))
@@ -158,7 +159,7 @@ public final class SOLLimePieConfig
 							+" Each benefit is a string with the following form: [+/-][type],[registry name],[value] (without the brackets)\n"
 							+" A leading plus (or the of a symbol) denotes a benefit, while a minus denotes a detriment.\n"
 							+" The type can either be 'attribute' for attribute modifiers or 'effect' for potion effects\n"
-							+" Registry names for common vanila attributes are \n"
+							+" Registry names for common vanilla attributes are \n"
 							+" generic.max_health, generic.knockback_resistance, generic.movement_speed, generic.luck, \n"
 							+" generic.attack_damage, generic.attack_speed, generic.armor, generic.armor_toughness \n"
 							+" The value of attributes is the numerical number that will be added to that attribute\n"
@@ -191,7 +192,7 @@ public final class SOLLimePieConfig
 							"attribute,generic.max_health,1;attribute,generic.armor_toughness,2",
 							"attribute,generic.max_health,1;effect,strength,2",
 							"attribute,generic.max_health,1;effect,luck,1"),
-							e -> e instanceof String);
+							() -> "", e -> e instanceof String);
 
 			minFoodsToActivate = builder
 					.translation(localizationPath("min_foods_to_activate"))
@@ -206,13 +207,13 @@ public final class SOLLimePieConfig
 					.translation(localizationPath("blacklist"))
 					.comment(" Foods in this list won't contribute to food diversity.\n"
 							+"\n")
-					.defineList("blacklist", Lists.newArrayList(), e -> e instanceof String);
+					.defineListAllowEmpty("blacklist", Lists.newArrayList(), () -> "", e -> e instanceof String);
 
 			whitelist = builder
 					.translation(localizationPath("whitelist"))
 					.comment("\n When this list contains anything, the blacklist is ignored and instead only foods from here count.\n"
 							+"\n")
-					.defineList("whitelist", Lists.newArrayList(), e -> e instanceof String);
+					.defineListAllowEmpty("whitelist", Lists.newArrayList(), () -> "", e -> e instanceof String);
 
 			builder.pop();
 			builder.push("Miscellaneous");
@@ -291,7 +292,7 @@ public final class SOLLimePieConfig
 							+" Each entry in the list should be a string defining one food, and the format is [registry name],[value]\n"
 							+" Note that tags are NOT currently supported.\n"
 							+"\n")
-					.defineList("complexityUnparsed", Lists.newArrayList(
+					.defineListAllowEmpty("complexityUnparsed", Lists.newArrayList(
 									"minecraft:cooked_porkchop,2",
 									"minecraft:cooked_beef,2",
 									"minecraft:golden_carrot,2",
@@ -319,7 +320,7 @@ public final class SOLLimePieConfig
 									"farmersdelight:chocolate_pie_slice,4",
 									"farmersdelight:apple_pie_slice,4",
 									"farmersdelight:sweet_berry_cheesecake_slice,4"),
-							e -> e instanceof String);
+							() -> "", e -> e instanceof String);
 
 			builder.pop();
 		}

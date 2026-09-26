@@ -6,7 +6,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.registries.BuiltInRegistries;
 
 import javax.annotation.Nullable;
-import java.util.Optional;
 
 public final class FoodInstance {
 	public final Item item;
@@ -21,13 +20,13 @@ public final class FoodInstance {
 
 		// TODO it'd be nice to store (and maybe even count) references to missing items, in case the mod is added back in later
 		if (!BuiltInRegistries.ITEM.containsKey(name)) {
-			SOLLimePie.LOGGER.warn("attempting to load item into food list that is no longer registered: " + encoded + " (removing from list)");
+			SOLLimePie.LOGGER.warn("attempting to load item into food list that is no longer registered: {} (removing from list)", encoded);
 			return null;
 		}
 
 		Item item = BuiltInRegistries.ITEM.get(name);
 		if (!new net.minecraft.world.item.ItemStack(item).has(net.minecraft.core.component.DataComponents.FOOD)) {
-			SOLLimePie.LOGGER.warn("attempting to load item into food list that is no longer edible: " + encoded + " (ignoring in case it becomes edible again later)");
+			SOLLimePie.LOGGER.warn("attempting to load item into food list that is no longer edible: {} (ignoring in case it becomes edible again later)", encoded);
 		}
 
 		return new FoodInstance(item);
@@ -35,8 +34,8 @@ public final class FoodInstance {
 
 	@Nullable
 	public String encode() {
-		return Optional.ofNullable(BuiltInRegistries.ITEM.getKey(item))
-			.map(ResourceLocation::toString)
+		return BuiltInRegistries.ITEM.getResourceKey(item)
+			.map(key -> key.location().toString())
 			.orElse(null);
 	}
 
@@ -47,8 +46,9 @@ public final class FoodInstance {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof FoodInstance)) return false;
-		FoodInstance other = (FoodInstance) obj;
+		if (!(obj instanceof FoodInstance other)) {
+		    return false;
+		}
 
 		return item.equals(other.item);
 	}
@@ -60,9 +60,6 @@ public final class FoodInstance {
 	@Override
 	public String toString() {
 		String enc = encode();
-		if (enc == null)
-			return "null";
-		else
-			return enc;
+		return enc == null ? "null" : enc;
 	}
 }

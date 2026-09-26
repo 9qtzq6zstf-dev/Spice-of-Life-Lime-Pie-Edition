@@ -18,46 +18,40 @@ public class ComplexityParser {
         for (String complexityString : unparsed) {
             String[] s = complexityString.split(",", 0);
             if (s.length != 2) {
-                SOLLimePie.LOGGER.warn("Invalid complexity specification: " + complexityString);
+                SOLLimePie.LOGGER.warn("Invalid complexity specification: {}", complexityString);
                 continue;
             }
 
             String foodString = s[0];
-            double complexity = 1.0;
+            double complexity;
             try {
                 complexity = Double.parseDouble(s[1]);
             }
             catch (NumberFormatException e) {
-                SOLLimePie.LOGGER.warn("Second argument in complexity specification needs to be a number: " + complexityString);
+                SOLLimePie.LOGGER.warn("Second argument in complexity specification needs to be a number: {}", complexityString);
                 continue;
             }
 
-            Item item;
+            ResourceLocation itemId;
             try {
-                item = BuiltInRegistries.ITEM.get(ResourceLocation.parse(foodString));
+                itemId = ResourceLocation.parse(foodString);
             }
             catch (ResourceLocationException e) {
-                SOLLimePie.LOGGER.warn("Invalid item name: " + foodString);
+                SOLLimePie.LOGGER.warn("Invalid item name: {}", foodString);
                 continue;
             }
-            if (item == null) {
-                SOLLimePie.LOGGER.warn("Invalid item name: " + foodString);
+            if (!BuiltInRegistries.ITEM.containsKey(itemId)) {
+                SOLLimePie.LOGGER.warn("Invalid item name: {}", foodString);
                 continue;
             }
+            Item item = BuiltInRegistries.ITEM.get(itemId);
 
             if (!new net.minecraft.world.item.ItemStack(item).has(net.minecraft.core.component.DataComponents.FOOD)) {
-                SOLLimePie.LOGGER.warn("Item is not food: " + foodString);
+                SOLLimePie.LOGGER.warn("Item is not food: {}", foodString);
                 continue;
             }
 
-            FoodInstance food = new FoodInstance(item);
-
-            if (food.encode() == null) {
-                SOLLimePie.LOGGER.warn("Item does not exist: " + foodString);
-                continue;
-            }
-
-            complexityMap.put(food, complexity);
+            complexityMap.put(new FoodInstance(item), complexity);
         }
         return complexityMap;
     }

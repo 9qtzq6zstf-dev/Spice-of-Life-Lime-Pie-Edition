@@ -8,11 +8,13 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
+import java.util.Objects;
+
 public record ConfigMessage(CompoundTag tag) implements CustomPacketPayload {
     public static final Type<ConfigMessage> TYPE = new Type<>(SOLLimePie.resourceLocation("config"));
     public static final StreamCodec<RegistryFriendlyByteBuf, ConfigMessage> STREAM_CODEC = StreamCodec.of(
         (buffer, message) -> buffer.writeNbt(message.tag),
-        buffer -> new ConfigMessage(buffer.readNbt())
+        buffer -> new ConfigMessage(Objects.requireNonNull(buffer.readNbt(), "Missing config payload"))
     );
 
     public ConfigMessage() { this(ConfigHandler.serializeConfig()); }

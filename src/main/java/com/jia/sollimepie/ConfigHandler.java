@@ -12,7 +12,6 @@ import net.minecraft.nbt.*;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -41,8 +40,11 @@ public class ConfigHandler {
         CompoundTag tag = new CompoundTag();
         ListTag list = new ListTag();
         for (Map.Entry<FoodInstance, Double> entry : complexityMap.entrySet()) {
-            CompoundTag entryTag = new CompoundTag();
             String encoded = entry.getKey().encode();
+            if (encoded == null) {
+                continue;
+            }
+            CompoundTag entryTag = new CompoundTag();
             entryTag.put(FOOD_KEY, StringTag.valueOf(encoded));
             entryTag.put(COMPLEXITY_VALUE_KEY, DoubleTag.valueOf(entry.getValue()));
             list.add(entryTag);
@@ -90,6 +92,9 @@ public class ConfigHandler {
             CompoundTag cnbt = (CompoundTag) nbt;
             String foodString = cnbt.getString(FOOD_KEY);
             FoodInstance food = FoodInstance.decode(foodString);
+            if (food == null) {
+                continue;
+            }
             double complexity = cnbt.getDouble(COMPLEXITY_VALUE_KEY);
             newComplexityMap.put(food, complexity);
         }
@@ -122,7 +127,9 @@ public class ConfigHandler {
     }
 
     public static void syncConfig(Player player) {
-        if (player.level().isClientSide) return;
+        if (player.level().isClientSide) {
+            return;
+        }
 
         PacketDistributor.sendToPlayer((ServerPlayer) player, new ConfigMessage());
     }
